@@ -8,12 +8,12 @@ namespace ant {
 
 namespace expconfig {
 namespace detector {
-struct APT;
+struct GAT;
 }}
 
 namespace calibration {
 
-class APT_Energy :
+class GAT_Energy :
         public Energy,
         public ReconstructHook::EventData
 {
@@ -21,9 +21,9 @@ class APT_Energy :
 
 public:
 
-    using detector_ptr_t = std::shared_ptr<const expconfig::detector::APT>;
+    using detector_ptr_t = std::shared_ptr<const expconfig::detector::GAT>;
 
-    APT_Energy(
+    GAT_Energy(
             const detector_ptr_t& apt,
             const std::shared_ptr<DataManager>& calmgr,
             const Calibration::Converter::ptr_t& converter,
@@ -35,7 +35,7 @@ public:
             defaults_t defaultRelativeGains
     );
 
-    virtual ~APT_Energy();
+    virtual ~GAT_Energy();
 
     virtual void GetGUIs(std::list<std::unique_ptr<calibration::gui::CalibModule_traits> >& guis, ant::OptionsPtr options) override;
 

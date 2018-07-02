@@ -27,7 +27,7 @@ const std::string Trigger::ScalerName::Beampolmon_1MHz   = "Beampolmon_1Mhz";
 const Trigger::ReferenceTimingHitMapping_t Trigger::Reference_CATCH_TaggerCrate = {1000, 1400};
 const Trigger::ReferenceTimingHitMapping_t Trigger::Reference_CATCH_CBCrate = {1001, 2000};
 const Trigger::ReferenceTimingHitMapping_t Trigger_2014::Reference_V1190_TAPSPbWO4 = {1002, 29192};
-const Trigger::ReferenceTimingHitMapping_t Trigger_2014::Reference_V1190_APT = {1003, 295};
+const Trigger::ReferenceTimingHitMapping_t Trigger_2014::Reference_V1190_GAT = {1003, 295};
 // these are for the new tagger, starting second half of 2017
 /// \todo Possibly create new trigger struct for the new tagger
 const Trigger::ReferenceTimingHitMapping_t Trigger::Reference_V1190_TaggerTDC1 = {1010, 927};
@@ -75,8 +75,8 @@ void Trigger_2014::BuildMappings(std::vector<UnpackerAcquConfig::hit_mapping_t>&
                 Reference_V1190_TAPSPbWO4.AcquRawChannel
                 );
     hit_mappings.emplace_back(
-                Reference_V1190_APT.LogicalChannel,
-                Reference_V1190_APT.AcquRawChannel
+                Reference_V1190_GAT.LogicalChannel,
+                Reference_V1190_GAT.AcquRawChannel
                 );
 
     // add the scaler mappings from internal map

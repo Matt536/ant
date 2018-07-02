@@ -1,4 +1,4 @@
-#include "APT_Energy.h"
+#include "GAT_Energy.h"
 
 #include "Energy_GUI.h"
 
@@ -8,7 +8,7 @@
 
 #include "calibration/fitfunctions/FitPhotonPeaks.h"
 
-#include "expconfig/detectors/APT.h"
+#include "expconfig/detectors/GAT.h"
 
 #include "base/Logger.h"
 
@@ -21,7 +21,7 @@ using namespace std;
 using namespace ant;
 using namespace ant::calibration;
 
-APT_Energy::APT_Energy(
+GAT_Energy::GAT_Energy(
         const detector_ptr_t& apt,
         const std::shared_ptr<DataManager>& calmgr,
         const Calibration::Converter::ptr_t& converter,
@@ -47,12 +47,12 @@ APT_Energy::APT_Energy(
 }
 
 
-APT_Energy::~APT_Energy()
+GAT_Energy::~GAT_Energy()
 {
 
 }
 
-void APT_Energy::GetGUIs(std::list<std::unique_ptr<gui::CalibModule_traits> >& guis, OptionsPtr options)
+void GAT_Energy::GetGUIs(std::list<std::unique_ptr<gui::CalibModule_traits> >& guis, OptionsPtr options)
 {
     if(options->HasOption("HistogramPath")) {
         LOG(INFO) << "Overwriting histogram path to " << options->Get<string>("HistogramPath");
@@ -111,12 +111,12 @@ void APT_Energy::GetGUIs(std::list<std::unique_ptr<gui::CalibModule_traits> >& g
 
 }
 
-void ant::calibration::APT_Energy::ApplyTo(TEventData& reconstructed)
+void ant::calibration::GAT_Energy::ApplyTo(TEventData& reconstructed)
 {
-    // search for APT/CB candidates and correct APT energy by CB theta angle
+    // search for GAT/CB candidates and correct GAT energy by CB theta angle
     for(TCandidate& cand : reconstructed.Candidates) {
         const bool cb_and_apt = cand.Detector & Detector_t::Type_t::CB &&
-                                cand.Detector & Detector_t::Type_t::APT;
+                                cand.Detector & Detector_t::Type_t::GAT;
         if(!cb_and_apt)
             continue;
         cand.VetoEnergy *= sin(cand.Theta);

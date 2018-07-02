@@ -164,12 +164,12 @@ struct TAPSVeto_Time : Time {
 };
 AUTO_REGISTER_PHYSICS(TAPSVeto_Time)
 
-struct APT_Time: Time{
-    APT_Time(const std::string& name, OptionsPtr opts) :
-        Time(Detector_t::Type_t::APT, name, opts)
+struct GAT_Time: Time{
+    GAT_Time(const std::string& name, OptionsPtr opts) :
+        Time(Detector_t::Type_t::GAT, name, opts)
     {}
 };
-AUTO_REGISTER_PHYSICS(APT_Time)
+AUTO_REGISTER_PHYSICS(GAT_Time)
 
 }}}
 

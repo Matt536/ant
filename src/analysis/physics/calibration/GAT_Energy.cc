@@ -1,4 +1,4 @@
-#include "APT_Energy.h"
+#include "GAT_Energy.h"
 
 #include "expconfig/ExpConfig.h"
 
@@ -16,21 +16,21 @@ Photon::Photon(const Detector_t::Type_t& detectorType, const string& name, Optio
     Physics(name, opts),
     Detector(ExpConfig::Setup::GetDetector(detectorType))
 {
-    const auto detector = ExpConfig::Setup::GetDetector(Detector_t::Type_t::APT);
+    const auto detector = ExpConfig::Setup::GetDetector(Detector_t::Type_t::GAT);
     const auto nChannels = detector->GetNChannels();
 
-    const BinSettings apt_channels(nChannels);
-    const BinSettings apt_rawvalues(4096);
+    const BinSettings gat_channels(nChannels);
+    const BinSettings gat_rawvalues(4096);
     const BinSettings energybins(500, 0, 10);
     //const BinSettings cb_energy(600, 0, 1200);
-    const BinSettings apt_energy(100, 0, 10);
+    const BinSettings gat_energy(100, 0, 10);
 
     h_pedestals = HistFac.makeTH2D(
-                      "APT Pedestals",
+                      "GAT Pedestals",
                       "Raw ADC value",
                       "#",
-                      apt_rawvalues,
-                      apt_channels,
+                      gat_rawvalues,
+                      gat_channels,
                       "Pedestals");
 }
 
@@ -56,12 +56,12 @@ namespace ant {
 namespace analysis {
 namespace physics {
 
-struct APT_Photon : Photon{
-    APT_Photon(const std::string& name, OptionsPtr opts) :
-        Photon(Detector_t::Type_t::APT, name, opts)
+struct GAT_Photon : Photon{
+    GAT_Photon(const std::string& name, OptionsPtr opts) :
+        Photon(Detector_t::Type_t::GAT, name, opts)
     {}
 };
-AUTO_REGISTER_PHYSICS(APT_Photon)
+AUTO_REGISTER_PHYSICS(GAT_Photon)
 }}}
 
 
@@ -70,20 +70,20 @@ using namespace ant;
 using namespace ant::analysis::physics;
 
 template<typename T>
-bool APT_Energy::shift_right(std::vector<T>& v)
+bool GAT_Energy::shift_right(std::vector<T>& v)
 {
     std::rotate(v.begin(), v.end() -1, v.end());
     return true;
 }
 
-APLCON::Fit_Settings_t APT_Energy::MakeFitSettings(unsigned max_iterations)
+APLCON::Fit_Settings_t GAT_Energy::MakeFitSettings(unsigned max_iterations)
 {
     APLCON::Fit_Settings_t settings;
     settings.MaxIterations = max_iterations;
     return settings;
 }
 
-APT_Energy::APT_Energy(const string& name, OptionsPtr opts) :
+GAT_Energy::GAT_Energy(const string& name, OptionsPtr opts) :
     Physics(name, opts),
     useHEP(opts->Get<bool>("UseHEP", false)),
     MAX_GAMMA(opts->Get<unsigned>("MaxGamma", 4)),
@@ -92,32 +92,32 @@ APT_Energy::APT_Energy(const string& name, OptionsPtr opts) :
 {
     promptrandom.AddPromptRange({-3, 2});
 
-    const auto detector = ExpConfig::Setup::GetDetector(Detector_t::Type_t::APT);
+    const auto detector = ExpConfig::Setup::GetDetector(Detector_t::Type_t::GAT);
     const auto nChannels = detector->GetNChannels();
 
-    const BinSettings apt_channels(nChannels);
-    const BinSettings apt_rawvalues(300);
+    const BinSettings gat_channels(nChannels);
+    const BinSettings gat_rawvalues(300);
     const BinSettings energybins(500, 0, 10);
     const BinSettings cb_energy(600, 0, 1200);
-    const BinSettings apt_energy(100, 0, 10);
+    const BinSettings gat_energy(100, 0, 10);
 
 
     h_pedestals = HistFac.makeTH2D(
-                      "APT Pedestals",
+                      "GAT Pedestals",
                       "Raw ADC value",
                       "#",
-                      apt_rawvalues,
-                      apt_channels,
+                      gat_rawvalues,
+                      gat_channels,
                       "Pedestals");
 
     h_bananas = HistFac.makeTH3D(
-                "APT Bananas",
+                "GAT Bananas",
                 "CB Energy / MeV",
-                "APT Energy / MeV",
+                "GAT Energy / MeV",
                 "Channel",
                 cb_energy,
-                apt_energy,
-                apt_channels,
+                gat_energy,
+                gat_channels,
                 "Bananas"
                 );
 
@@ -143,80 +143,80 @@ APT_Energy::APT_Energy(const string& name, OptionsPtr opts) :
 
 
     dEvE_all_combined = HistFac.makeTH2D("M+ combined all channels dEvE proton fitted",
-                                         "E_{p} [MeV]", "E_{APT} [MeV]",
-                                         cb_energy, apt_energy, "dEvE_all_combined");
+                                         "E_{p} [MeV]", "E_{/GAT} [MeV]",
+                                         cb_energy, gat_energy, "dEvE_all_combined");
 
     for (size_t i = 0; i < nChannels; i++)
         dEvE_combined.emplace_back(HistFac.makeTH2D("M+ combined channel "+to_string(i)+" dEvE proton fitted",
-                                                    "E_{p} [MeV]", "E_{APT} [MeV]",
-                                                    cb_energy, apt_energy,
+                                                    "E_{p} [MeV]", "E_{GAT} [MeV]",
+                                                    cb_energy, gat_energy,
                                                     "dEvE_fit_p_combined_chan"+to_string(i)));
 
-    projections = HistFac.makeTH2D("Projections of High Energy Tail of Protons", "E_{APT} [MeV]", "APT Channel",
-                                   apt_energy, BinSettings(nChannels), "projections_hep");
+    projections = HistFac.makeTH2D("Projections of High Energy Tail of Protons", "E_{GAT} [MeV]", "GAT Channel",
+                                   gat_energy, BinSettings(nChannels), "projections_hep");
 
 
     if (useHEP) {
-        LOG(INFO) << "Create APT Calibration histograms for High Energy Protons method";
+        LOG(INFO) << "Create GAT Calibration histograms for High Energy Protons method";
         LOG(INFO) << "Search protons in events with up to " << MaxNGamma() << " Photons";
     }
 }
 
-APT_Energy::PerChannel_t::PerChannel_t(HistogramFactory HistFac)
+GAT_Energy::PerChannel_t::PerChannel_t(HistogramFactory HistFac)
 {
     const BinSettings cb_energy(400,0,800);
-    const BinSettings apt_timing(300,-300,700);
-    const BinSettings apt_rawvalues(300);
-    const BinSettings apt_energy(150,0,30);
+    const BinSettings gat_timing(300,-300,700);
+    const BinSettings gat_rawvalues(300);
+    const BinSettings gat_energy(150,0,30);
 
     PedestalTiming = HistFac.makeTH2D(
-                         "APT Pedestals Timing",
+                         "GAT Pedestals Timing",
                          "Timing / ns",
                          "Raw ADC value",
-                         apt_timing,
-                         apt_rawvalues,
+                         gat_timing,
+                         gat_rawvalues,
                          "PedestalTiming");
 
     PedestalNoTiming = HistFac.makeTH1D(
-                           "APT Pedestals No Timing",
+                           "GAT Pedestals No Timing",
                            "Raw ADC value",
                            "#",
-                           apt_rawvalues,
+                           gat_rawvalues,
                            "PedestalNoTiming");
 
     Banana = HistFac.makeTH2D(
-                 "APT Banana",
+                 "GAT Banana",
                  "CB Energy / MeV",
-                 "APT Energy / MeV",
+                 "GAT Energy / MeV",
                  cb_energy,
-                 apt_energy,
+                 gat_energy,
                  "Banana"
                  );
 
     BananaRaw = HistFac.makeTH2D(
-                    "APT Banana Raw",
+                    "GAT Banana Raw",
                     "CB Energy / MeV",
-                    "APT ADC Value",
+                    "GAT ADC Value",
                     cb_energy,
                     BinSettings(300,0,2000),
                     "BananaRaw"
                     );
 
     BananaUnmatched = HistFac.makeTH2D(
-                 "APT Banana",
+                 "GAT Banana",
                  "CB Energy / MeV",
-                 "APT Energy / MeV",
+                 "GAT Energy / MeV",
                  cb_energy,
-                 apt_energy,
+                 gat_energy,
                  "BananaUnmatched"
                  );
 
 
-    TDCMultiplicity = HistFac.makeTH1D("APT TDC Multiplicity", "nHits", "#", BinSettings(10), "TDCMultiplicity");
-    QDCMultiplicity = HistFac.makeTH1D("APT QDC Multiplicity", "nHits", "#", BinSettings(10), "QDCMultiplicity");
+    TDCMultiplicity = HistFac.makeTH1D("GAT TDC Multiplicity", "nHits", "#", BinSettings(10), "TDCMultiplicity");
+    QDCMultiplicity = HistFac.makeTH1D("GAT QDC Multiplicity", "nHits", "#", BinSettings(10), "QDCMultiplicity");
 }
 
-void APT_Energy::ProcessEvent(const TEvent& event, manager_t&)
+void GAT_Energy::ProcessEvent(const TEvent& event, manager_t&)
 {
     triggersimu.ProcessEvent(event);
 
@@ -230,7 +230,7 @@ void APT_Energy::ProcessEvent(const TEvent& event, manager_t&)
     std::map<unsigned, hitmapping_t> hits;
 
     for(const TDetectorReadHit& readhit : event.Reconstructed().DetectorReadHits) {
-        if(readhit.DetectorType != Detector_t::Type_t::APT)
+        if(readhit.DetectorType != Detector_t::Type_t::GAT)
             continue;
 
         auto& item = hits[readhit.Channel];
@@ -273,53 +273,53 @@ void APT_Energy::ProcessEvent(const TEvent& event, manager_t&)
     // get some CandidateMatcher independent bananas
     {
         TClusterPtrList cbClusters;
-        TClusterPtrList aptClusters;
+        TClusterPtrList gatClusters;
         for(auto cl : event.Reconstructed().Clusters.get_iter()) {
             if(cl->DetectorType == Detector_t::Type_t::CB)
                 cbClusters.emplace_back(cl);
-            else if(cl->DetectorType == Detector_t::Type_t::APT)
-                aptClusters.emplace_back(cl);
+            else if(cl->DetectorType == Detector_t::Type_t::GAT)
+                gatClusters.emplace_back(cl);
 
         }
 
-        if(aptClusters.size() == 1) {
-            const auto& APT_cluster = *aptClusters.front();
+        if(gatClusters.size() == 1) {
+            const auto& GAT_cluster = *gatClusters.front();
             // per channel histograms
-            PerChannel_t& h = h_perChannel[APT_cluster.CentralElement];
+            PerChannel_t& h = h_perChannel[GAT_cluster.CentralElement];
 
             for(auto& cb_cluster : cbClusters) {
-                h.BananaUnmatched->Fill(cb_cluster->Energy, APT_cluster.Energy);
+                h.BananaUnmatched->Fill(cb_cluster->Energy, GAT_cluster.Energy);
             }
         }
     }
 
     // bananas per channel histograms
     for(const auto& candidate : event.Reconstructed().Candidates) {
-        // only candidates with one cluster in CB and one cluster in APT
+        // only candidates with one cluster in CB and one cluster in GAT
         if(candidate.Clusters.size() != 2)
             continue;
-        const bool cb_and_apt = candidate.Detector & Detector_t::Type_t::CB &&
-                                candidate.Detector & Detector_t::Type_t::APT;
-        if(!cb_and_apt)
+        const bool cb_and_gat = candidate.Detector & Detector_t::Type_t::CB &&
+                                candidate.Detector & Detector_t::Type_t::GAT;
+        if(!cb_and_gat)
             continue;
 
-        // search for APT cluster
-        const auto& APT_cluster = candidate.FindFirstCluster(Detector_t::Type_t::APT);
+        // search for GAT cluster
+        const auto& GAT_cluster = candidate.FindFirstCluster(Detector_t::Type_t::GAT);
 
         if (!useHEP)
             h_bananas->Fill(candidate.CaloEnergy,
                             candidate.VetoEnergy,
-                            APT_cluster->CentralElement);
+                            GAT_cluster->CentralElement);
 
         // per channel histograms
-        PerChannel_t& h = h_perChannel[APT_cluster->CentralElement];
+        PerChannel_t& h = h_perChannel[GAT_cluster->CentralElement];
 
         // fill the banana
         h.Banana->Fill(candidate.CaloEnergy,
                        candidate.VetoEnergy);
 
         // is there an pedestal available?
-        const auto it_hit = hits.find(APT_cluster->CentralElement);
+        const auto it_hit = hits.find(GAT_cluster->CentralElement);
         if(it_hit == hits.end()) {
             continue;
         }
@@ -339,7 +339,7 @@ void APT_Energy::ProcessEvent(const TEvent& event, manager_t&)
         ProcessHEP(event);
 }
 
-void APT_Energy::ProcessHEP(const TEvent &event)
+void GAT_Energy::ProcessHEP(const TEvent &event)
 {
     const auto& cands = event.Reconstructed().Candidates;
 
@@ -370,9 +370,9 @@ void APT_Energy::ProcessHEP(const TEvent &event)
     }
 }
 
-void APT_Energy::Finish()
+void GAT_Energy::Finish()
 {
-    const auto detector = ExpConfig::Setup::GetDetector(Detector_t::Type_t::APT);
+    const auto detector = ExpConfig::Setup::GetDetector(Detector_t::Type_t::GAT);
 
     h_BananaEntries = HistFac.makeTH1D("Banana Entries","Channel","",
                                        BinSettings(detector->GetNChannels()), "h_BananaEntries");
@@ -401,7 +401,7 @@ void APT_Energy::Finish()
     }
 }
 
-void APT_Energy::ShowResult()
+void GAT_Energy::ShowResult()
 {
     canvas(GetName())
             << drawoption("colz") << h_pedestals
@@ -428,7 +428,7 @@ void APT_Energy::ShowResult()
     }
 }
 
-bool APT_Energy::find_best_comb(const TTaggerHit& taggerhit,
+bool GAT_Energy::find_best_comb(const TTaggerHit& taggerhit,
                                 TCandidatePtrList& comb,
                                 TParticlePtr& fitted_proton)
 {
@@ -496,4 +496,4 @@ bool APT_Energy::find_best_comb(const TTaggerHit& taggerhit,
     return true;
 }
 
-AUTO_REGISTER_PHYSICS(APT_Energy)***/
+AUTO_REGISTER_PHYSICS(GAT_Energy)***/

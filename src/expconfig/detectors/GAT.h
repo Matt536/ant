@@ -6,7 +6,7 @@
 namespace ant {
 namespace expconfig {
 namespace detector {
-struct APT :
+struct GAT :
         Detector_t,
         UnpackerAcquConfig
 {
@@ -25,14 +25,15 @@ struct APT :
         return elements[channel].Flags;
     }
 
-    // for UnpackerAcquConfig
+    //for UnpackerAcquConfig (?)
     virtual void BuildMappings(
             std::vector<hit_mapping_t>&,
             std::vector<scaler_mapping_t>&) const override;
 
 protected:
-
+    //declares Element_t under structure Detector_t
     struct Element_t : Detector_t::Element_t {
+        //giving Element_t 3 parameters
         Element_t(
                 unsigned channel,
                 unsigned adc,
@@ -49,8 +50,8 @@ protected:
         unsigned TDC;
     };
 
-    APT(const std::vector<Element_t>& elements_init) :
-        Detector_t(Detector_t::Type_t::APT),
+    GAT(const std::vector<Element_t>& elements_init) :
+        Detector_t(Detector_t::Type_t::GAT),
         elements(elements_init)
     {
         InitElements();
@@ -62,8 +63,8 @@ private:
 
 };
 
-struct APT_2017 : APT {
-    APT_2017() : APT(elements_init) {}
+struct GAT_2017 : GAT {
+    GAT_2017() : GAT(elements_init) {}
     static const std::vector<Element_t> elements_init;
 };
 

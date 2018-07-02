@@ -147,6 +147,8 @@ bool UnpackerA2Geant::OpenFile(const string& filename)
             taps_detector = detector;
         if(detector->Type == Detector_t::Type_t::TAPSVeto)
             tapsveto_detector = detector;
+        if(detector->Type == Detector_t::Type_t::GAT)
+            GAT_detector = detector;
     }
 
     if(!taggerdetector)
@@ -293,6 +295,32 @@ TEvent UnpackerA2Geant::NextEvent()
                         );
         }
     }
+
+
+
+    // fill GAT Hits
+    // loops for each row
+    for(int i=0;i<int(t.atI().size());i++) {
+
+        // Change depending on how the active target feeds in GetNChannel
+        const unsigned ch = (t.atI[i]-1);
+
+        // activated if channel # is outside of the channel range
+        if(ch >= GAT_detector->GetNChannels())
+            throw Exception("GAT channel number out of bounds " + to_string(ch) + " / " + to_string(GAT_detector->GetNChannels()));
+
+        const Detector_t::Type_t det = Detector_t::Type_t::GAT;
+        hits.emplace_back(
+                    LogicalChannel_t{det, Channel_t::Type_t::Integral, ch},
+                    TDetectorReadHit::Value_t{GeVtoMeV*t.atE[i]}
+                    );
+        hits.emplace_back(
+                    LogicalChannel_t{det, Channel_t::Type_t::Timing, ch},
+                    TDetectorReadHit::Value_t{t.atT[i]}
+                    );
+    }
+
+
 
     // "reconstruct" a tagger electron from the photon
     const double photon_energy = GeVtoMeV*t.beam[4];

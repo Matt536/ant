@@ -11,11 +11,11 @@ using namespace std;
 
 const Detector_t::Any_t Detector_t::Any_t::None;
 const Detector_t::Any_t Detector_t::Any_t::Tracker(Type_t::MWPC0 | Type_t::MWPC1);
-const Detector_t::Any_t Detector_t::Any_t::CB_Apparatus(Detector_t::Any_t::Tracker | Type_t::PID | Type_t::CB | Type_t::APT);
+const Detector_t::Any_t Detector_t::Any_t::CB_Apparatus(Detector_t::Any_t::Tracker | Type_t::PID | Type_t::CB | Type_t::GAT);
 const Detector_t::Any_t Detector_t::Any_t::TAPS_Apparatus(Type_t::TAPS | Type_t::TAPSVeto);
 const Detector_t::Any_t Detector_t::Any_t::Calo(Type_t::CB | Type_t::TAPS);
 /// \todo is APT actually a Veto detector?
-const Detector_t::Any_t Detector_t::Any_t::Veto(Type_t::PID | Type_t::TAPSVeto | Type_t::APT);
+const Detector_t::Any_t Detector_t::Any_t::Veto(Type_t::PID | Type_t::TAPSVeto | Type_t::GAT);
 
 namespace ant {
 ostream& operator<<(ostream& stream, const Detector_t::Any_t& o)  {
@@ -64,7 +64,7 @@ const map<Detector_t::Type_t, string> detectorTypeMap = {
     MAKE_DETECTOR_TYPE_ENTRY(TAPSVeto),
     MAKE_DETECTOR_TYPE_ENTRY(Trigger),
     MAKE_DETECTOR_TYPE_ENTRY(Raw),
-    MAKE_DETECTOR_TYPE_ENTRY(APT)
+    MAKE_DETECTOR_TYPE_ENTRY(GAT)
 };
 
 const char* ant::Detector_t::ToString(const Type_t& type)

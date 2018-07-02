@@ -53,6 +53,7 @@ private:
     std::shared_ptr<Detector_t> pid_detector;
     std::shared_ptr<Detector_t> taps_detector;
     std::shared_ptr<Detector_t> tapsveto_detector;
+    std::shared_ptr<Detector_t> GAT_detector;
 
     std::unique_ptr<unpacker::geant::promptrandom_t> promptrandom;
 
@@ -88,6 +89,10 @@ private:
         ADD_BRANCH_OPT_T(ROOTArray<Float_t>, mposy)
         ADD_BRANCH_OPT_T(ROOTArray<Float_t>, mposz)
         ADD_BRANCH_OPT_T(ROOTArray<Float_t>, emwpc)
+        ADD_BRANCH_T(ROOTArray<Int_t>,atN)
+        ADD_BRANCH_T(ROOTArray<Int_t>,atI)
+        ADD_BRANCH_T(ROOTArray<Float_t>,atE)
+        ADD_BRANCH_T(ROOTArray<Float_t>,atT)
     };
 
     GeantTree_t geantTree;

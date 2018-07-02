@@ -37,8 +37,7 @@ set(SRCS_DETECTORS
   detectors/PID.cc
   detectors/TAPSVeto.cc
   detectors/Cherenkov.h
-  detectors/APT.cc
-  detectors/detail/APT_elements.h
+  detectors/GAT.cc
   detectors/detail/EPT_2014_elements.h
   detectors/detail/Tagger_2007_1508_elements.h
   detectors/detail/Tagger_2010_03_450_elements.h
@@ -65,6 +64,7 @@ set(SRCS_DETECTORS
   detectors/detail/PID_2009_06_elements.h
   detectors/detail/PID_2009_07_elements.h
   detectors/detail/PID_2014_elements.h
+  detectors/detail/GAT_elements.h
 )
 
 

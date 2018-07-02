@@ -1,4 +1,6 @@
-#include "APT_Photon.h"
+//not being used
+
+#include "GAT_Photon.h"
 
 #include "Photon_GUI.h"
 
@@ -6,7 +8,7 @@
 
 #include "calibration/fitfunctions/FitGaus.h"
 
-#include "expconfig/detectors/APT.h"
+#include "expconfig/detectors/GAT.h"
 
 #include "base/Logger.h"
 

@@ -4,7 +4,6 @@
 #include "base/Logger.h"
 
 #include "calibration/modules/Time.h"
-#include "calibration/modules/APT_Energy.h"
 #include "calibration/modules/CB_Energy.h"
 #include "calibration/modules/CB_TimeWalk.h"
 #include "calibration/modules/PID_Energy.h"
@@ -19,6 +18,10 @@
 #include "calibration/modules/Tagger_QDC.h"
 #include "calibration/modules/TaggEff.h"
 #include "calibration/modules/ClusterCorrection.h"
+
+//added
+#include "calibration/modules/GAT_Energy.h"
+//#include "calibration/modules/GAT_Photon.h"
 
 #include "calibration/fitfunctions/FitGaus.h"
 #include "calibration/fitfunctions/FitGausPol0.h"
@@ -45,7 +48,7 @@ Setup_2016_06_Active::Setup_2016_06_Active(const string& name, OptionsPtr opt) :
     PID(make_shared<detector::PID_2014>()),
     TAPS(make_shared<detector::TAPS_2013_11>(Cherenkov != nullptr, pizzaInstalled, false)), // false = don't use sensitive channels
     TAPSVeto(make_shared<detector::TAPSVeto_2014>(Cherenkov != nullptr, pizzaInstalled)),
-    APT(make_shared<detector::APT_2017>())
+    GAT(make_shared<detector::GAT_2017>())
 {
     // add the detectors of interest
     AddDetector(Trigger);
@@ -54,7 +57,7 @@ Setup_2016_06_Active::Setup_2016_06_Active(const string& name, OptionsPtr opt) :
     AddDetector(PID);
     AddDetector(TAPS);
     AddDetector(TAPSVeto);
-    AddDetector(APT);
+    AddDetector(GAT);
 
     // Possible: can set set inner ring and outer ring to NoCalib for TAPS (see 2014) "touches hole"
     // removed
@@ -74,8 +77,8 @@ Setup_2016_06_Active::Setup_2016_06_Active(const string& name, OptionsPtr opt) :
                                                Trigger->Reference_V1190_TAPSPbWO4,
                                                calibration::converter::Gains::V1190_TDC
                                                );
-    const auto& convert_V1190_APT =  make_shared<calibration::converter::MultiHitReference<std::uint16_t>>(
-                                               Trigger->Reference_V1190_APT,
+    const auto& convert_V1190_GAT =  make_shared<calibration::converter::MultiHitReference<std::uint16_t>>(
+                                               Trigger->Reference_V1190_GAT,
                                                calibration::converter::Gains::V1190_TDC
                                                );
 
@@ -85,7 +88,7 @@ Setup_2016_06_Active::Setup_2016_06_Active(const string& name, OptionsPtr opt) :
     AddHook(convert_CATCH_Tagger);
     AddHook(convert_CATCH_CB);
     AddHook(convert_V1190_TAPSPbWO4);
-    AddHook(convert_V1190_APT);
+    AddHook(convert_V1190_GAT);
 
     // Tagger/EPT QDC measurements need some simple hook
     AddHook<calibration::Tagger_QDC>(Tagger->Type, convert_MultiHit16bit);
@@ -144,21 +147,21 @@ Setup_2016_06_Active::Setup_2016_06_Active(const string& name, OptionsPtr opt) :
                                                timecuts ? interval<double>{-12, 12} : no_timecut,
                                                timecuts ? interval<double>{-12, 12} : no_timecut
                                                );
-    AddCalibration<calibration::Time>(APT,
+    AddCalibration<calibration::Time>(GAT,
                                       calibrationDataManager,
-                                      convert_V1190_APT,
+                                      convert_V1190_GAT,
                                       -375,
                                       std::make_shared<calibration::gui::FitGaus>(),
                                       timecuts ? interval<double>{-1000, 1000} : no_timecut
                                       );
 
-    AddCalibration<calibration::APT_Energy>(APT, calibrationDataManager, convert_MultiHit16bit,
+    AddCalibration<calibration::GAT_Energy>(GAT, calibrationDataManager, convert_MultiHit16bit,
                                             std::vector<double>{0.0},   // default pedestals
                                             std::vector<double>{1.0},   // default photons
                                             std::vector<double>{1.0},   // default gain
-                                            std::vector<double>{0.0}, // default Raw threshold
-                                            std::vector<double>{0.0},                     // default MC MeV threshold
-                                            std::vector<double>{1.0}      // default relative gain
+                                            std::vector<double>{0.0},   // default Raw threshold
+                                            std::vector<double>{0.0},   // default MC MeV threshold
+                                            std::vector<double>{1.0}    // default relative gain
                                             );
 
     AddCalibration<calibration::CB_Energy>(CB, calibrationDataManager, convert_GeSiCa_SADC,

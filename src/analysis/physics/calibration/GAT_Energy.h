@@ -50,7 +50,7 @@ public:
 namespace analysis {
 namespace physics {
 
-class APT_Energy : public Physics {
+class GAT_Energy : public Physics {
 
 protected:
     TH2D* h_pedestals = nullptr;
@@ -100,7 +100,7 @@ protected:
 
 public:
 
-    APT_Energy(const std::string& name, OptionsPtr opts);
+    GAT_Energy(const std::string& name, OptionsPtr opts);
 
     static APLCON::Fit_Settings_t MakeFitSettings(unsigned);
 
