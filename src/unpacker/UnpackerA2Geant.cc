@@ -303,7 +303,7 @@ TEvent UnpackerA2Geant::NextEvent()
     for(int i=0;i<int(t.atI().size());i++) {
 
         // Change depending on how the active target feeds in GetNChannel
-        const unsigned ch = (t.atI[i]-1);
+        const unsigned ch = (t.atI[i]);
 
         // activated if channel # is outside of the channel range
         if(ch >= GAT_detector->GetNChannels())
