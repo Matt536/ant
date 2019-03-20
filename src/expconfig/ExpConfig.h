@@ -115,7 +115,7 @@ public:
     virtual bool Matches(const TID& header) const = 0;
 
     virtual std::string GetName() const = 0;
-    virtual double GetActiveChannels() const = 0;
+    //virtual double GetActiveChannels() const = 0;
     virtual double GetElectronBeamEnergy() const = 0;
     virtual std::list< std::shared_ptr< Calibration::PhysicsModule> > GetCalibrations() const = 0;
     virtual std::string GetPIDCutsDirectory() const = 0;

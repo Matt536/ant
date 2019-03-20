@@ -221,11 +221,11 @@ bool Setup_2016_06_Active::Matches(const ant::TID& tid) const
 }
 
 //defines number of channels
-double Setup_2016_06_Active::GetActiveChannels() const
-{
-    return 6;
-    cout << "Hello world" << endl;
-}
+//double Setup_2016_06_Active::GetActiveChannels() const
+//{
+//    return 6;
+//    cout << "Hello world" << endl;
+//}
 
 //double plzwork = Setup_2016_06_Active::GetChannels();
 

@@ -34,7 +34,7 @@ public:
 
     Setup_2016_06_Active(const std::string& name, OptionsPtr opt);
 
-    virtual double GetActiveChannels() const override;
+    //virtual double GetActiveChannels() const override;
 
     virtual double GetElectronBeamEnergy() const override;
 

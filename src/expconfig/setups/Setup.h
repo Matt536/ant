@@ -62,9 +62,9 @@ public:
         return name_;
     }
 
-    virtual double GetActiveChannels() const override{
-        return 1;
-    }
+    //virtual double GetActiveChannels() const override{
+    //    return 1;
+    //}
 
     virtual double GetElectronBeamEnergy() const override {
         return std::numeric_limits<double>::quiet_NaN();
