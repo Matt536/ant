@@ -36,10 +36,14 @@ void GAT::BuildMappings(vector<UnpackerAcquConfig::hit_mapping_t>& hit_mappings,
 //tests if all channels are accounted for
 void GAT::InitElements()
 {
+    //ant::expconfig::Setup_traits plzwork;
+    //assert(elements.size() == plzwork.GetActiveChannels());
+
+
     assert(elements.size() == 64);
     for(size_t i=0; i<elements.size();i++) {
         Element_t& element = elements[i];
         if(element.Channel != i)
-            throw Exception("APT element channels not in correct order");
+            throw Exception("GAT element channels not in correct order");
     }
 }

@@ -220,7 +220,19 @@ bool Setup_2016_06_Active::Matches(const ant::TID& tid) const
     return true;
 }
 
-double Setup_2016_06_Active::GetElectronBeamEnergy() const {
+//defines number of channels
+double Setup_2016_06_Active::GetActiveChannels() const
+{
+    return 6;
+    cout << "Hello world" << endl;
+}
+
+//double plzwork = Setup_2016_06_Active::GetChannels();
+
+
+
+double Setup_2016_06_Active::GetElectronBeamEnergy() const
+{
     return 450.0;
 }
 
@@ -242,7 +254,8 @@ Setup_traits::candidatebuilder_config_t Setup_2016_06_Active::GetCandidateBuilde
     return conf;
 }
 
-ant::UnpackerA2GeantConfig::promptrandom_config_t Setup_2016_06_Active::GetPromptRandomConfig() const {
+ant::UnpackerA2GeantConfig::promptrandom_config_t Setup_2016_06_Active::GetPromptRandomConfig() const
+{
     ant::UnpackerA2GeantConfig::promptrandom_config_t conf;
     // default constructed conf has everything disabled
     if(MCTaggerHits) {
