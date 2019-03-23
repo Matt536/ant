@@ -1,6 +1,7 @@
 #include <detectors/GAT.h>
 
 //defines and sets a vector to be used for GAT.h and subsequently GAT.cc
+//number of rows must be equal to GAT_channels defined in setup
 const std::vector<ant::expconfig::detector::GAT::Element_t>
 ant::expconfig::detector::GAT_2017::elements_init =
 {

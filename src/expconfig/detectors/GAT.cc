@@ -7,6 +7,9 @@
 #include <cassert>
 #include <cmath> // provides M_PI
 
+//Included so that we can call GetGATChannels
+#include "setups/Setup_2016_06_Active.h"
+
 using namespace std;
 using namespace ant;
 using namespace ant::expconfig::detector;
@@ -16,7 +19,7 @@ using namespace ant::expconfig::detector;
 void GAT::BuildMappings(vector<UnpackerAcquConfig::hit_mapping_t>& hit_mappings,
                         vector<UnpackerAcquConfig::scaler_mapping_t>&) const
 {
-    //assigning element as an Element_t (and checking if it's the same as elements?) (both arrays?)
+    //assigning element as an Element_t
     for(const Element_t& element : elements)
     {
         //finds energy
@@ -33,14 +36,9 @@ void GAT::BuildMappings(vector<UnpackerAcquConfig::hit_mapping_t>& hit_mappings,
 }
 
 
-//tests if all channels are accounted for
 void GAT::InitElements()
 {
-    //ant::expconfig::Setup_traits plzwork;
-    //assert(elements.size() == plzwork.GetActiveChannels());
-
-
-    assert(elements.size() == 64);
+    assert(elements.size() == setup::Setup_2016_06_Active::GetGATChannels());
     for(size_t i=0; i<elements.size();i++) {
         Element_t& element = elements[i];
         if(element.Channel != i)

@@ -81,7 +81,7 @@ Setup_2016_06_Active::Setup_2016_06_Active(const string& name, OptionsPtr opt) :
                                                Trigger->Reference_V1190_GAT,
                                                calibration::converter::Gains::V1190_TDC
                                                );
-
+    //Setup_2016_06_Active::GAT_channels = 64;
     // the order of the reconstruct hooks is important
     // add both CATCH converters and the V1190 first,
     // since they need to scan the detector read for their reference hit
@@ -220,15 +220,13 @@ bool Setup_2016_06_Active::Matches(const ant::TID& tid) const
     return true;
 }
 
-//defines number of channels
-//double Setup_2016_06_Active::GetActiveChannels() const
-//{
-//    return 6;
-//    cout << "Hello world" << endl;
-//}
+//Defines number of channels
+//This will need to be defined in each Active target
 
-//double plzwork = Setup_2016_06_Active::GetChannels();
-
+int Setup_2016_06_Active::GetGATChannels()
+{
+    return 64;
+}
 
 
 double Setup_2016_06_Active::GetElectronBeamEnergy() const

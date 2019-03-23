@@ -58,6 +58,7 @@ protected:
     }
 
 private:
+    bool MaxChannelsReached;
     void InitElements();
     std::vector<Element_t> elements;
 

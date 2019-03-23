@@ -18,6 +18,8 @@ namespace setup {
  */
 class Setup_2016_06_Active : public Setup
 {
+
+
 protected:
     const bool MCTaggerHits;
     const bool pizzaInstalled;
@@ -32,9 +34,9 @@ protected:
 
 public:
 
-    Setup_2016_06_Active(const std::string& name, OptionsPtr opt);
+    static int GetGATChannels();
 
-    //virtual double GetActiveChannels() const override;
+    Setup_2016_06_Active(const std::string& name, OptionsPtr opt);
 
     virtual double GetElectronBeamEnergy() const override;
 
