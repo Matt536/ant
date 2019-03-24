@@ -34,7 +34,7 @@ protected:
 
 public:
 
-    static int GetGATChannels();
+    static unsigned int GetGATChannels();
 
     Setup_2016_06_Active(const std::string& name, OptionsPtr opt);
 

@@ -220,10 +220,8 @@ bool Setup_2016_06_Active::Matches(const ant::TID& tid) const
     return true;
 }
 
-//Defines number of channels
-//This will need to be defined in each Active target
-
-int Setup_2016_06_Active::GetGATChannels()
+// defines number of channels, will be specific to each active target
+unsigned int Setup_2016_06_Active::GetGATChannels()
 {
     return 64;
 }
