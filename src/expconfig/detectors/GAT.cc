@@ -8,6 +8,7 @@
 #include <cmath> // provides M_PI
 
 //Included so that we can call GetGATChannels
+//Every new active target setup must be included
 #include "setups/Setup_2016_06_Active.h"
 
 using namespace std;
