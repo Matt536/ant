@@ -5,11 +5,11 @@ using namespace ant;
 using namespace ant::analysis;
 using namespace ant::analysis::physics;
 
-//My plot, right now it adds total energy readings
+// my plot, right now it adds total energy readings
 GAT_Plot::GAT_Plot(const string& name, OptionsPtr opts) :
     Physics(name, opts)
 {
-    BinSettings bins_TotalEnergy(100,0,15);
+    BinSettings bins_TotalEnergy(100,0,5);
 
     TotalEnergy = HistFac.makeTH1D("Total Energy",
                              "Energy","",
@@ -21,29 +21,30 @@ GAT_Plot::GAT_Plot(const string& name, OptionsPtr opts) :
     promptrandom.AddPromptRange({ -7,   7});
     promptrandom.AddRandomRange({-50, -10});
     promptrandom.AddRandomRange({ 10,  50});
-
     // create/initialize the tree
     t.CreateBranches(HistFac.makeTTree("t"));
 }
 
+// process for a SINGLE event
 void GAT_Plot::ProcessEvent(const TEvent& event, manager_t&)
 {
+    double summedEnergy = 0;
     for(auto& hit : event.Reconstructed().DetectorReadHits)
     {
-        if(hit.DetectorType == Detector_t::Type_t::GAT){
-            if(hit.ChannelType == Channel_t::Type_t::Integral){
-                TotalEnergy->Fill(hit.Values[0].Uncalibrated);
-
-                std::cout<< "Hello World" << endl;
-                t.Tree->Fill();
-            }
+        // screens out data we don't need
+        if(hit.DetectorType == Detector_t::Type_t::GAT && hit.ChannelType == Channel_t::Type_t::Integral)
+        {
+            summedEnergy += hit.Values[0].Calibrated;
         }
-   }
+    }
+    // fills histogram
+    TotalEnergy->Fill(summedEnergy);
+    t.Tree->Fill();
 }
 
 void GAT_Plot::ShowResult()
 {
-    ant::canvas("Total Energy Plot")
+    ant::canvas("Total Energy Histogram")
             << TotalEnergy
             << endc;
 }

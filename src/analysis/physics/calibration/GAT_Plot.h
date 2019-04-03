@@ -20,6 +20,7 @@ public:
 
 private:
     TH1D* TotalEnergy;
+    //double temp;
 
     tree_t t;
 
