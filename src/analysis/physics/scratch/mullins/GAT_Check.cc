@@ -1,4 +1,4 @@
-#include "GATCheck.h"
+#include "GAT_Check.h"
 
 using namespace std;
 using namespace ant;
@@ -6,7 +6,7 @@ using namespace ant::analysis;
 using namespace ant::analysis::physics;
 
 
-GATCheck::GATCheck(const string& name, OptionsPtr opts) :
+GAT_Check::GAT_Check(const string& name, OptionsPtr opts) :
     Physics(name, opts)
 {
     BinSettings bins_atT(100,0,15);
@@ -43,7 +43,7 @@ GATCheck::GATCheck(const string& name, OptionsPtr opts) :
 }
 
 // adds data
-void GATCheck::ProcessEvent(const TEvent& event, manager_t&)
+void GAT_Check::ProcessEvent(const TEvent& event, manager_t&)
 {
     for(auto& hit : event.Reconstructed().DetectorReadHits)
     {
@@ -59,7 +59,7 @@ void GATCheck::ProcessEvent(const TEvent& event, manager_t&)
     }
 }
 
-void GATCheck::ShowResult()
+void GAT_Check::ShowResult()
 {
     ant::canvas("atI, atE, and atT plots")
             << h_atI
@@ -69,4 +69,4 @@ void GATCheck::ShowResult()
 }
 
 
-AUTO_REGISTER_PHYSICS(GATCheck)
+AUTO_REGISTER_PHYSICS(GAT_Check)

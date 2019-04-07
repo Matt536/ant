@@ -1,4 +1,4 @@
-#include "GAT_Plot.h"
+#include "GAT_SummedEnergy.h"
 
 using namespace std;
 using namespace ant;
@@ -6,7 +6,7 @@ using namespace ant::analysis;
 using namespace ant::analysis::physics;
 
 // my plot, right now it adds total energy readings
-GAT_Plot::GAT_Plot(const string& name, OptionsPtr opts) :
+GAT_SummedEnergy::GAT_SummedEnergy(const string& name, OptionsPtr opts) :
     Physics(name, opts)
 {
     BinSettings bins_TotalEnergy(100,0,5);
@@ -26,7 +26,7 @@ GAT_Plot::GAT_Plot(const string& name, OptionsPtr opts) :
 }
 
 // process for a SINGLE event
-void GAT_Plot::ProcessEvent(const TEvent& event, manager_t&)
+void GAT_SummedEnergy::ProcessEvent(const TEvent& event, manager_t&)
 {
     double summedEnergy = 0;
     for(auto& hit : event.Reconstructed().DetectorReadHits)
@@ -42,11 +42,11 @@ void GAT_Plot::ProcessEvent(const TEvent& event, manager_t&)
     t.Tree->Fill();
 }
 
-void GAT_Plot::ShowResult()
+void GAT_SummedEnergy::ShowResult()
 {
     ant::canvas("Total Energy Histogram")
             << TotalEnergy
             << endc;
 }
 
-AUTO_REGISTER_PHYSICS(GAT_Plot)
+AUTO_REGISTER_PHYSICS(GAT_SummedEnergy)

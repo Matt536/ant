@@ -9,7 +9,7 @@ namespace ant {
 namespace analysis {
 namespace physics {
 
-class GAT_Plot : public Physics {
+class GAT_SummedEnergy : public Physics {
 
 public:
     struct tree_t : WrapTTree
@@ -28,7 +28,7 @@ private:
     utils::TriggerSimulation triggersimu;
 
 public:
-    GAT_Plot(const std::string& name, OptionsPtr opts);
+    GAT_SummedEnergy(const std::string& name, OptionsPtr opts);
 
     virtual void ProcessEvent(const TEvent& event, manager_t& manager) override;
     virtual void ShowResult() override;

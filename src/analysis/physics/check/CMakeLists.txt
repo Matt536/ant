@@ -8,4 +8,4 @@ add_ant_physics(ThreePhotonCheck.cc)
 add_ant_physics(MCClusteringCheck.cc)
 add_ant_physics(PIDEfficiencyCheck.cc)
 add_ant_physics(KinFitIMCheck.cc)
-add_ant_physics(GATCheck.cc)
+

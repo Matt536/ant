@@ -9,7 +9,7 @@ namespace ant {
 namespace analysis {
 namespace physics {
 
-class GATCheck : public Physics {
+class GAT_Check : public Physics {
 
 public:
     struct tree_t : WrapTTree
@@ -29,7 +29,7 @@ private:
     utils::TriggerSimulation triggersimu;
 
 public:
-    GATCheck(const std::string& name, OptionsPtr opts);
+    GAT_Check(const std::string& name, OptionsPtr opts);
 
     virtual void ProcessEvent(const TEvent& event, manager_t& manager) override;
     virtual void ShowResult() override;
